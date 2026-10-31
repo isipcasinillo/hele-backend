@@ -1,0 +1,33 @@
+type User {
+  id: ID!
+  firstName: String
+  lastName: String
+  preferredName: String
+  email: String!
+  phoneNumber: String
+  profileImage: String
+}
+
+input CreateUserInput {
+  firstName: String
+  lastName: String
+  preferredName: String
+  suffix: String
+  email: String!
+  phoneNumber: String
+  profileImage: String
+  password: String!
+
+  address: String
+  state: String
+  country: String
+  city: String
+}
+
+extend type Query {
+  user(id: ID!): User
+}
+
+extend type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
