@@ -1,0 +1,14 @@
+type Bottle {
+  id: Int!
+  amount: Int
+  userId: Int!
+  createdDate: Date
+  childId: Int!
+  comment: String
+  modifiedDate: Date
+  modifiedBy: Int!
+}
+
+extend type Query {
+  bottles: [Bottle!]!
+}

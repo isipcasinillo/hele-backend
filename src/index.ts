@@ -5,9 +5,8 @@ import http from 'node:http'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@as-integrations/express5'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import { typeDefs , resolvers } from './graphql/index.js'
+import { typeDefs, resolvers } from './graphql/index.js'
 import { createContext } from './context.ts'
-
 
 const app = express()
 const httpServer = http.createServer(app)
@@ -24,7 +23,7 @@ app.use(
   '/graphql',
   cors(),
   express.json(),
-   expressMiddleware(server, {
+  expressMiddleware(server, {
     context: createContext,
   }),
 )
