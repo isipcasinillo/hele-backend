@@ -1,8 +1,7 @@
-
-import { BookDataSource } from './modules/book/datasource/BookDatasource.ts'
+import { BottleDatasource } from './modules/bottles/datasource/BottleDatasource.ts'
 export const createContext = async () => ({
   dataSources: {
-    book: new BookDataSource(),
+    bottle: new BottleDatasource(),
   },
 })
 
