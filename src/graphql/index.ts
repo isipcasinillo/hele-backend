@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge'
+import scalars from './scalars.ts'
 
 const loadedTypeDefs = loadFilesSync([
   join(process.cwd(), 'src/graphql/**/*.graphql'),
@@ -13,4 +14,4 @@ const loadedResolvers = loadFilesSync(join(process.cwd(), 'src/modules/**/resolv
 
 export const typeDefs = mergeTypeDefs(loadedTypeDefs)
 
-export const resolvers = mergeResolvers(loadedResolvers)
+export const resolvers = mergeResolvers([scalars, ...loadedResolvers])

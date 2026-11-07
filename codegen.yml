@@ -11,3 +11,6 @@ generates:
         Date:
           input: string
           output: string
+        DateTime:
+          input: Date
+          output: Date

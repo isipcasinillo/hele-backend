@@ -1,0 +1,23 @@
+type Tenant {
+  id: ID!
+  ownerId: Int!
+  name: String!
+  status: TenantStatus!
+  createdAt: DateTime
+  modifiedAt: DateTime
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+input CreateTenantPayload {
+  name: String!
+  ownerId: Int!
+}
+
+extend type Mutation {
+  addTenant(payload: CreateTenantPayload!): Boolean
+}

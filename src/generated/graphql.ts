@@ -1,6 +1,7 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -9,6 +10,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   Date: { input: string; output: string; }
+  DateTime: { input: Date; output: Date; }
 };
 
 export type Bottle = {
@@ -23,9 +25,20 @@ export type Bottle = {
   userId: Scalars['Int']['output'];
 };
 
+export type CreateTenantPayload = {
+  name: Scalars['String']['input'];
+  ownerId: Scalars['Int']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['Boolean']['output']>;
+  addTenant?: Maybe<Scalars['Boolean']['output']>;
+};
+
+
+export type MutationAddTenantArgs = {
+  payload: CreateTenantPayload;
 };
 
 export type Query = {
@@ -33,6 +46,22 @@ export type Query = {
   _empty?: Maybe<Scalars['Boolean']['output']>;
   bottles: Array<Bottle>;
 };
+
+export type Tenant = {
+  __typename?: 'Tenant';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  modifiedAt?: Maybe<Scalars['DateTime']['output']>;
+  name: Scalars['String']['output'];
+  ownerId: Scalars['Int']['output'];
+  status: TenantStatus;
+};
+
+export enum TenantStatus {
+  Active = 'ACTIVE',
+  Deleted = 'DELETED',
+  Suspended = 'SUSPENDED'
+}
 
 
 
@@ -109,22 +138,31 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bottle: ResolverTypeWrapper<Bottle>;
+  CreateTenantPayload: CreateTenantPayload;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Tenant: ResolverTypeWrapper<Tenant>;
+  TenantStatus: TenantStatus;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bottle: Bottle;
+  CreateTenantPayload: CreateTenantPayload;
   Date: Scalars['Date']['output'];
+  DateTime: Scalars['DateTime']['output'];
+  ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
+  Tenant: Tenant;
 };
 
 export type BottleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Bottle'] = ResolversParentTypes['Bottle']> = {
@@ -142,8 +180,13 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  addTenant?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTenantArgs, 'payload'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -151,10 +194,21 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   bottles?: Resolver<Array<ResolversTypes['Bottle']>, ParentType, ContextType>;
 };
 
+export type TenantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tenant'] = ResolversParentTypes['Tenant']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  modifiedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['TenantStatus'], ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Bottle?: BottleResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Tenant?: TenantResolvers<ContextType>;
 };
 
